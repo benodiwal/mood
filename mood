@@ -1,0 +1,44 @@
+#!/bin/node
+
+const images = { "happy": "https://avatars.githubusercontent.com/u/116568350?v=4",  "sad": "https://avatars.githubusercontent.com/u/167278572?v=4" };
+
+const settings_file_path = () => {
+    const { homedir } = require("os");
+    const path = require("path");
+    const settingsPath = path.join(homedir(), ".config/Code/User/settings.json");
+    return settingsPath;
+}
+
+const happy_or_sad = (backgroundCustomImages, mood) => {
+    backgroundCustomImages[0] = images[mood];
+}
+
+const more_sad = () => {
+    console.log("happy or sad ?");
+}
+
+const parse_args = () => {
+    const mood = process.argv[2];
+    if (!mood) {
+        console.error("What's your mood ?");
+        process.exit(1);
+    }
+    return mood;
+}
+
+const main = () => {
+    const { readFileSync, writeFileSync } = require("fs");
+    const path = settings_file_path();
+    
+    const data = readFileSync(path).toString();
+    const json_data = JSON.parse(data);
+    
+    const backgroundCustomImages = json_data["background.customImages"];
+
+    const mood = parse_args();
+    mood === "happy" || "sad" ? happy_or_sad(backgroundCustomImages, mood) : more_sad();
+
+    writeFileSync(path, JSON.stringify(json_data), 'utf8');
+}
+
+main();
