@@ -1,6 +1,6 @@
 # Mood
 
-This script sets the background image based on your mood.
+This script sets the background image for VS code based on your mood.
 
 ## Installation
 
